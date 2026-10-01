@@ -542,7 +542,7 @@ jobs:
   # ==========================================================================
 
   test-e2e:
-    name: E2E Tests (Shard ${{ matrix.shard }})
+    name: E2E Tests (Endform)
     timeout-minutes: 60
     runs-on: ubuntu-latest
     needs:
@@ -555,12 +555,9 @@ jobs:
       packages: read
       checks: write
       pull-requests: write
+      id-token: write
     env:
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: [1, 2, 3, 4]
     services:
       db:
         image: pgvector/pgvector:pg14
@@ -747,11 +744,6 @@ jobs:
         run: |
           cd e2e-tests
           yarn install
-          # System Chrome handles browsing, but retry videos need Playwright's ffmpeg.
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0 yarn playwright install ffmpeg
-
-      - name: Verify Google Chrome
-        run: google-chrome --version
 
       - name: Wait for services
         env:
@@ -778,11 +770,14 @@ jobs:
           echo "=== Container status ==="
           docker ps -a
 
-      - name: Run E2E tests (shard ${{ matrix.shard }})
+      - name: Run E2E tests with Endform
         env:
           PUBLIC_BACKEND_URL: http://localhost:8000
           PUBLIC_WEB_FRONTEND_URL: http://localhost:3000
+          BASE_URL: http://localhost:3000
           PRIVATE_BACKEND_URL: http://backend:8000
+          ENDFORM_GIT_BRANCH: ${{ github.head_ref || github.ref_name }}
+          ENDFORM_GIT_COMMIT_SHA: ${{ env.REAL_GITHUB_SHA }}
           # The CI web-frontend runs with the default (empty) cookie prefix, so
           # tests that read/set cookies (e.g. the user_source_token) must use the
           # same empty prefix rather than playwright.config's baserow_e2e_ default.
@@ -800,14 +795,15 @@ jobs:
           CI: 1
         run: |
           cd e2e-tests
-          npx playwright test --timeout=30000 --grep-invert=@slow --shard=${{ matrix.shard }}/4 --project=chrome
+          npx endform@latest --version
+          npx endform@latest test --organization-id 2G1ZCj7X --timeout=30000 --grep-invert=@slow --project=chrome
 
       - name: Upload E2E test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: e2e-test-results-shard-${{ matrix.shard }}
-          path: e2e-tests/blob-report/
+          name: e2e-test-report-endform
+          path: e2e-tests/playwright-report/
           retention-days: 7
           include-hidden-files: true
 
@@ -828,43 +824,6 @@ jobs:
         run: |
           docker stop backend web-frontend celery || true
           docker rm backend web-frontend celery || true
-
-  collect-e2e-reports:
-    name: Collect E2E Test Reports
-    runs-on: ubuntu-latest
-    needs: [test-e2e]
-    permissions:
-      contents: read
-      checks: read
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-
-      - name: Download all E2E test results
-        uses: actions/download-artifact@v4
-        with:
-          pattern: e2e-test-results-shard-*
-          path: e2e-tests/blob-report
-          merge-multiple: true
-
-      - name: Merge Playwright reports
-        run: |
-          cd e2e-tests
-          yarn install
-          npx playwright merge-reports --reporter html blob-report/
-
-      - name: Upload merged E2E report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: e2e-test-report-merged
-          path: e2e-tests/playwright-report/
-          retention-days: 30
 
   # ==========================================================================
   # COVERAGE STAGE - Collect and report test coverage
@@ -1296,7 +1255,6 @@ jobs:
       - check-mjml-compiled
       # E2E tests (can be skipped based on path changes)
       - test-e2e
-      - collect-e2e-reports
       # Coverage (depends on test-backend)
       - collect-coverage
     steps:
@@ -1314,7 +1272,6 @@ jobs:
             test-zapier=${{ needs.test-zapier.result }}
             check-mjml-compiled=${{ needs.check-mjml-compiled.result }}
             test-e2e=${{ needs.test-e2e.result }}
-            collect-e2e-reports=${{ needs.collect-e2e-reports.result }}
             collect-coverage=${{ needs.collect-coverage.result }}
         run: |
           echo "=================================="

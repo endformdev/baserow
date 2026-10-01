@@ -1,23 +1,26 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
 import path from "path";
+import dotenv from "dotenv";
 
 // Resolve relative to this file so paths are correct regardless of cwd
 // (VS Code Playwright extension runs from the workspace root, not e2e-tests/).
-require("dotenv").config({ path: path.join(__dirname, ".env") });
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const defaultBackendPort = process.env.E2E_BACKEND_PORT || "8070";
 const defaultFrontendPort = process.env.E2E_FRONTEND_PORT || "3070";
 
 export const baserowConfig = {
-  PUBLIC_WEB_FRONTEND_URL: process.env.PUBLIC_WEB_FRONTEND_URL
-    ? process.env.PUBLIC_WEB_FRONTEND_URL
-    : `http://localhost:${defaultFrontendPort}`,
+  PUBLIC_WEB_FRONTEND_URL:
+    process.env.BASE_URL ??
+    process.env.PUBLIC_WEB_FRONTEND_URL ??
+    `http://localhost:${defaultFrontendPort}`,
   PUBLIC_BACKEND_URL: process.env.PUBLIC_BACKEND_URL
     ? process.env.PUBLIC_BACKEND_URL
     : `http://localhost:${defaultBackendPort}`,
   BUILDER_PREVIEW_URL:
     process.env.BASEROW_BUILDER_PREVIEW_URL ??
+    process.env.BASE_URL ??
     process.env.PUBLIC_WEB_FRONTEND_URL ??
     `http://localhost:${defaultFrontendPort}`,
   BASEROW_FRONTEND_COOKIE_PREFIX:
@@ -54,8 +57,9 @@ const config: PlaywrightTestConfig = {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
     /* Base URL to use in actions like `await page.goto('/')`. */
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    baseURL: baserowConfig.PUBLIC_WEB_FRONTEND_URL,
+    /* Keep traces for failed tests. See https://playwright.dev/docs/trace-viewer */
+    trace: "retain-on-failure",
     video: "on-first-retry",
     nuxt: {
       host: baserowConfig.PUBLIC_WEB_FRONTEND_URL,

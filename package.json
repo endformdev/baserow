@@ -1,0 +1,11 @@
+{
+  "name": "baserow-endform",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "endform": "0.81.3"
+  },
+  "workspaces": [
+    "e2e-tests"
+  ]
+}

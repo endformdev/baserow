@@ -172,3 +172,8 @@ web-frontend/storybook-static
 
 .agent
 MEMORY.md
+
+# Endform reports from the repository-root Playwright wrapper
+/playwright-report/
+/test-results/
+/blob-report/

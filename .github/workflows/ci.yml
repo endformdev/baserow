@@ -549,7 +549,7 @@ jobs:
       - detect-changes
       - build-backend
       - build-frontend
-    if: needs.detect-changes.outputs.backend == 'true' || needs.detect-changes.outputs.frontend == 'true' || needs.detect-changes.outputs.dockerfiles == 'true' || needs.detect-changes.outputs.e2e == 'true' || github.ref_name == 'develop' || github.ref_name == 'master'
+    if: needs.detect-changes.outputs.backend == 'true' || needs.detect-changes.outputs.frontend == 'true' || needs.detect-changes.outputs.dockerfiles == 'true' || needs.detect-changes.outputs.e2e == 'true' || github.ref_name == 'develop' || github.ref_name == 'master' || (github.repository == 'endformdev/baserow' && startsWith(github.head_ref || github.ref_name, 'codex/endform-'))
     permissions:
       contents: read
       packages: read

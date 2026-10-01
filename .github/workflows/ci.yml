@@ -796,6 +796,9 @@ jobs:
         run: |
           cd e2e-tests
           npx endform@latest --version
+          # Temporary diagnostic: expose the error from one existing test before
+          # spending another full job on repeated integration timeouts.
+          npx endform@latest test tests/auth/login.spec.ts:24 --organization-id 2G1ZCj7X --timeout=30000 --grep-invert=@slow --project=chrome --retries=0
           npx endform@latest test --organization-id 2G1ZCj7X --timeout=30000 --grep-invert=@slow --project=chrome
 
       - name: Upload E2E test results

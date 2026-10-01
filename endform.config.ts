@@ -1,5 +1,5 @@
 import { defineEndformConfig } from "endform";
-import { baserowConfig } from "./playwright.config";
+import { baserowConfig } from "./e2e-tests/playwright.config";
 
 const applicationPorts = [
   baserowConfig.PUBLIC_WEB_FRONTEND_URL,
@@ -15,11 +15,11 @@ const applicationPorts = [
   .map(({ port, protocol }) => Number(port || (protocol === "https:" ? 443 : 80)));
 
 export default defineEndformConfig({
-  // Runtime image reads and the imported module outside the e2e package need
-  // explicit transfer; the latter was missing on the remote runner.
+  // Transfer only the runtime-read image and the frontend protocol module.
+  // The root Playwright wrapper keeps both inside the upload root.
   additionalFiles: [
-    "assets/testuploadimage.png",
-    "../web-frontend/modules/core/plugins/realtimeProtocol.js",
+    "e2e-tests/assets/testuploadimage.png",
+    "web-frontend/modules/core/plugins/realtimeProtocol.js",
   ],
   // The Axios API setup stalls with HTTP interception. Forward only the
   // application URLs plus MailHog, barrier, and S3Mock loopback ports.

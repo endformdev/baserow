@@ -419,6 +419,48 @@ dunder-proto@^1.0.1:
     es-errors "^1.3.0"
     gopd "^1.2.0"
 
+endform-darwin-arm64@0.81.3:
+  version "0.81.3"
+  resolved "https://registry.yarnpkg.com/endform-darwin-arm64/-/endform-darwin-arm64-0.81.3.tgz#4120ddf5d0ffcb8241a05ce64fd651e4fb6a2e5b"
+  integrity sha512-BV3Ji195mR8GnxTbz+FDBS2wPKymW0o/xzxGz4TbWU0IdD4FLLsx4TZBm/VVEvkrnHnxXeJQhAaN2L+m4YTHVw==
+
+endform-darwin-x86@0.81.3:
+  version "0.81.3"
+  resolved "https://registry.yarnpkg.com/endform-darwin-x86/-/endform-darwin-x86-0.81.3.tgz#ca98300b6214d0b9f61cf25e22469d0ea59b9ab4"
+  integrity sha512-w9/t/7X09tzGN5CQMISWXPYr5axRbqbAwjSTq0MWwZCF+sq25SjbSppllqzfCGAgieHJdmiMft6/RffRzAlmcg==
+
+endform-linux-arm64@0.81.3:
+  version "0.81.3"
+  resolved "https://registry.yarnpkg.com/endform-linux-arm64/-/endform-linux-arm64-0.81.3.tgz#34f8f285a27ea8b9ae64f9a80e4b6adc3449d82b"
+  integrity sha512-YR0FMjgx66Y3IwX/8ZvBtooqTKt05GwHjKKuc14raYK+0c3qxArjP/jU/eyjhAc3ybd8YQ9jcTQjszvc8cf9OA==
+
+endform-linux-x86@0.81.3:
+  version "0.81.3"
+  resolved "https://registry.yarnpkg.com/endform-linux-x86/-/endform-linux-x86-0.81.3.tgz#76fbb653999ece47c492c185df19062ec7e7f00c"
+  integrity sha512-TVahPFdCvq2dbyO7WtUjcbmHLNT+dXKB1YImEQ7gDXTLpv9AOigpkN8jYmK1SXgNHiwpibM7dGQYULOLw+oEDg==
+
+endform-win32-arm64@0.81.3:
+  version "0.81.3"
+  resolved "https://registry.yarnpkg.com/endform-win32-arm64/-/endform-win32-arm64-0.81.3.tgz#2480cb2f228886e53d28a637590984a2b84915e1"
+  integrity sha512-etfYsOPqesPE1RIxzHKBPy/aICoFcCd1rCkPUw3xRBMZsCwYDHMFC/awrRN8d7Bav98T6ht4jyI8k07tsbVruQ==
+
+endform-win32-x86@0.81.3:
+  version "0.81.3"
+  resolved "https://registry.yarnpkg.com/endform-win32-x86/-/endform-win32-x86-0.81.3.tgz#e7b2e0928631a6ba2a2007776b142f13e70be768"
+  integrity sha512-2Oz2ys88AS5GbuyUvpUq5KdtPIv6I0DxRiwf+mWd/Onh2diPoTGD/cfZyU3GYF3GYtWFXmc7OKbEOeZiVeDRDw==
+
+endform@0.81.3:
+  version "0.81.3"
+  resolved "https://registry.yarnpkg.com/endform/-/endform-0.81.3.tgz#8fac728b526ab92b409167d8dc38aa2054abf310"
+  integrity sha512-VnlmxakSs1u7N1CjOp1hRtCDcBnmNwUH9UALAoxG2LRU3fWpUJ5lNw0s7cARqZTn5OM9F0iJYBvnlaRrOICApw==
+  optionalDependencies:
+    endform-darwin-arm64 "0.81.3"
+    endform-darwin-x86 "0.81.3"
+    endform-linux-arm64 "0.81.3"
+    endform-linux-x86 "0.81.3"
+    endform-win32-arm64 "0.81.3"
+    endform-win32-x86 "0.81.3"
+
 entities@^7.0.0:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-7.0.1.tgz#26e8a88889db63417dcb9a1e79a3f1bc92b5976b"

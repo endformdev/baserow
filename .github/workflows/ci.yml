@@ -606,7 +606,7 @@ jobs:
         with:
           node-version: "24"
           cache: "yarn"
-          cache-dependency-path: "e2e-tests/yarn.lock"
+          cache-dependency-path: "yarn.lock"
 
       - name: Log in to GitHub Container Registry
         if: needs.build-backend.outputs.is_fork != 'true'
@@ -794,16 +794,15 @@ jobs:
           E2E_BUTTON_RATE_LIMIT: "3"
           CI: 1
         run: |
-          cd e2e-tests
           npx endform@latest --version
-          npx endform@latest test --organization-id 2G1ZCj7X --timeout=30000 --grep-invert=@slow --project=chrome
+          npx endform@latest test --config=playwright.endform.config.ts --organization-id 2G1ZCj7X --timeout=30000 --grep-invert=@slow --project=chrome
 
       - name: Upload E2E test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: e2e-test-report-endform
-          path: e2e-tests/playwright-report/
+          path: playwright-report/
           retention-days: 7
           include-hidden-files: true
 
